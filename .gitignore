@@ -2,6 +2,8 @@
 logs
 test_logs
 *.tex
+*.json
+spasm
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -1,0 +1,8 @@
+pandas
+tensorflow
+numpy
+matplotlib
+sklearn
+pyyaml
+termcolor
+itertools

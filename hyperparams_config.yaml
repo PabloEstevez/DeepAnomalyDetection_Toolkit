@@ -1,0 +1,75 @@
+# [TODO]: Some description here
+#
+---
+DatasetList:
+  - dataset_file: ../Datasets/Final/simuleMV_1000x100_0anom.csv
+    normal_class: 1
+    hidden_layer_activation_function: relu
+    output_layer_activation_function: linear
+    hidden_layer_size: 64
+    bottleneck_layer_size: 25
+    PCs: 8
+    epochs: 200
+    batch_size: 8
+    learning_rate: 0.0004
+    sparsity: 0.000 #1
+    threshold_percentile: 99
+    show_figures: true
+    enable_logging: false
+    n_anom_vars: 50
+    train_test_split_method:
+      method_name: fixed
+      test_size: 0.2
+
+  - dataset_file: ../Datasets/Final/simuleMV_1000x1000_0anom.csv
+    normal_class: 1
+    hidden_layer_activation_function: relu
+    output_layer_activation_function: linear
+    hidden_layer_size: 512
+    bottleneck_layer_size: 16
+    PCs: 10
+    epochs: 300
+    batch_size: 16
+    learning_rate: 0.00001
+    sparsity: 0.0001
+    threshold_percentile: 99
+    show_figures: false
+    enable_logging: true
+    n_anom_vars: 500
+    train_test_split_method:
+      method_name: fixed
+      test_size: 0.2
+
+  - dataset_file: ../Datasets/Final/simuleMV_1000x10000_0anom.csv
+    normal_class: 1
+    hidden_layer_activation_function: relu
+    output_layer_activation_function: sigmoid
+    hidden_layer_size: 64
+    bottleneck_layer_size: 2
+    PCs: 5
+    epochs: 40
+    batch_size: 512
+    threshold_percentile: 95
+    show_figures: true
+    enable_logging: false
+    n_anom_vars: 5000
+    train_test_split_method:
+      method_name: fixed
+      test_size: 0.2
+
+  - dataset_file: ../Datasets/ecg_mod.csv # http://storage.googleapis.com/download.tensorflow.org/data/ecg.csv
+    normal_class: 1
+    hidden_layer_activation_function: relu
+    output_layer_activation_function: sigmoid
+    hidden_layer_size: 64
+    bottleneck_layer_size: 2
+    PCs: 3
+    epochs: 40
+    batch_size: 512
+    threshold_percentile: 92
+    show_figures: true
+    enable_logging: false
+    n_anom_vars: 0
+    train_test_split_method:
+      method_name: fixed
+      test_size: 0.2

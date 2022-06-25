@@ -1,0 +1,84 @@
+# [TODO]: Some description here
+#
+---
+DatasetList:
+  - dataset_file: ../Datasets/ecg.csv # http://storage.googleapis.com/download.tensorflow.org/data/ecg.csv
+    normal_class: 1
+    hidden_layer_activation_function: relu
+    output_layer_activation_function: sigmoid
+    hidden_layer_size: 64
+    bottleneck_layer_size: 2
+    PCs: 3
+    epochs: 20
+    batch_size: 512
+    threshold_percentile: 95
+    show_figures: true
+    enable_logging: false
+    train_test_split_method:
+      method_name: random
+      test_size: 0.2
+  
+  - dataset_file: ../Datasets/simuleMV_11000x10_200anom.csv
+    normal_class: 1
+    hidden_layer_activation_function: relu
+    output_layer_activation_function: sigmoid
+    hidden_layer_size: 7
+    bottleneck_layer_size: 2
+    PCs: 3
+    epochs: 20
+    batch_size: 512
+    threshold_percentile: 99
+    show_figures: true
+    enable_logging: false
+    train_test_split_method:
+      method_name: fixed
+      train_test_cut_point: 10000
+  
+  - dataset_file: ../Datasets/simuleMV_7000x100_1000anom.csv
+    normal_class: 1
+    hidden_layer_activation_function: relu
+    output_layer_activation_function: sigmoid
+    hidden_layer_size: 7
+    bottleneck_layer_size: 2
+    PCs: 3
+    epochs: 20
+    batch_size: 512
+    threshold_percentile: 99
+    show_figures: true
+    enable_logging: false
+    train_test_split_method:
+      method_name: fixed
+      train_test_cut_point: 5000
+      test_size: 0.2857
+
+  - dataset_file: ../Datasets/simuleMV_10000x1000_1000anom.csv
+    normal_class: 1
+    hidden_layer_activation_function: relu
+    output_layer_activation_function: sigmoid
+    hidden_layer_size: 64
+    bottleneck_layer_size: 2
+    PCs: 3
+    epochs: 20
+    batch_size: 512
+    threshold_percentile: 99
+    show_figures: true
+    enable_logging: false
+    train_test_split_method:
+      method_name: fixed
+      test_size: 0.2
+
+  - dataset_file: ../Datasets/simuleMV_2000x5000_200anom.csv
+    normal_class: 1
+    hidden_layer_activation_function: relu
+    output_layer_activation_function: sigmoid
+    hidden_layer_size: 64
+    bottleneck_layer_size: 2
+    PCs: 5
+    epochs: 20
+    batch_size: 512
+    threshold_percentile: 99
+    show_figures: true
+    enable_logging: false
+    train_test_split_method:
+      method_name: fixed
+      test_size: 0.2
