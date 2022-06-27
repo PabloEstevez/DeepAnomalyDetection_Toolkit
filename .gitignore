@@ -4,6 +4,9 @@ test_logs
 *.tex
 *.json
 spasm
+table2latex.m
+*_old.*
+*.asv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
