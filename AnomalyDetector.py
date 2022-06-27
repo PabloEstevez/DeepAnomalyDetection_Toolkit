@@ -119,20 +119,23 @@ class AnomalyDetector():
 
         # No preprocessing
         if method == 0:
-            pass
+            prep_name = "NoPrep"
         # Mean-centering
         elif method == 1:
+            prep_name = "MC"
             average = np.sum(train_data, axis=0)/rows
             train_data = train_data - average
             test_data = test_data - average
         # Auto-scaling
         elif method == 2:
+            prep_name = "AS"
             average = np.sum(train_data, axis=0)/rows
             scale = tf.math.sqrt(tf.math.reduce_sum(tf.math.square(train_data - average), axis=0)/(cols-1))
             train_data = (train_data - average)/scale
             test_data = (test_data - average)/scale
         # Normalization
         elif method == 3:
+            prep_name = "Norm"
             min_val = tf.reduce_min(train_data)
             max_val = tf.reduce_max(train_data)
             train_data = (train_data - min_val) / (max_val - min_val)
@@ -141,7 +144,7 @@ class AnomalyDetector():
         train_data = tf.cast(train_data, tf.float32)
         test_data = tf.cast(test_data, tf.float32)
 
-        return (train_data, test_data)
+        return (train_data, test_data, prep_name)
 
     def generate_anomalies(self, test_data):
         #anom1 = 3*test_data[int(len(test_data)/2):len(test_data)]
@@ -178,7 +181,12 @@ class AnomalyDetector():
         if self.__config["n_anom_vars"] > 0:
             test_data, test_labels = self.generate_anomalies(test_data)
 
-        train_data, test_data = self.preprocessing(train_data, test_data, 2)
+        # Preprocessing
+        if ("prep_method" in self.__config):
+            prep_method = self.__config["prep_method"]
+        else:
+            prep_method = 1 # Mean-centering
+        train_data, test_data, prep_name = self.preprocessing(train_data, test_data, prep_method)
 
         if self.__config["normal_class"] == 1:
             normal_train_data = train_data[train_labels]
@@ -285,7 +293,8 @@ class AnomalyDetector():
         closest_threshold = np.argmin(np.abs(thresholds - threshold))
         self.print_stats(pred_labels, test_labels)
         print(colored("AUC = {}".format(roc_auc), "cyan"))
-        #scipy.io.savemat("logs/mat/"+self.__config['dataset_file'].split('/')[-1].replace(".csv","_"+str(self.__config["n_anom_vars"])+"gen_NoPrep-S-Autoencoder.mat"), dict(test_labels=np.array(test_labels.astype(float)), pred_loss=np.array(pred_loss).astype(float), threshold=threshold)) #, autoencoder_fpr=fpr, autoencoder_tpr=tpr, autoencoder_thresholds=thresholds, autoencoder_closest_threshold=closest_threshold, autoencoder_roc_auc=roc_auc))
+        sparsity_string = "S-" if sparsity>0 else ""
+        #scipy.io.savemat("logs/mat/"+self.__config['dataset_file'].split('/')[-1].replace(".csv","_"+str(self.__config["n_anom_vars"])+"gen_"+prep_name+"-"+sparsity_string+"Autoencoder.mat"), dict(test_labels=np.array(test_labels.astype(float)), pred_loss=np.array(pred_loss).astype(float), threshold=threshold)) #, autoencoder_fpr=fpr, autoencoder_tpr=tpr, autoencoder_thresholds=thresholds, autoencoder_closest_threshold=closest_threshold, autoencoder_roc_auc=roc_auc))
 
         plt.figure(5)
         plt.plot(fpr, tpr, label='Autoencoder AUC = {:.4f}'.format(roc_auc))

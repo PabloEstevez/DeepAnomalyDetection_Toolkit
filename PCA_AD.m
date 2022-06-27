@@ -16,8 +16,7 @@ raw = fread(fid,inf);
 str = char(raw'); 
 fclose(fid);
 full_configuration = jsondecode(str);
-config = full_configuration.DatasetList(1);
-config = config{1,1};
+config = full_configuration.DatasetList(3);
 
 %% Import dataset
 dataset_table = readtable(config.dataset_file);
@@ -84,7 +83,7 @@ test_data = data(train_test_cut_point+1:end, :);
 [test_data_height, ~] = size(test_data);
 if config.n_anom_vars > 0
     % test_data = [test_data(1:test_data_height/2,:); 3*test_data(test_data_height/2+1:end,:)];
-    n_anom_vars = 50;%config.n_anom_vars;
+    n_anom_vars = config.n_anom_vars;
 %     anom_gain = 5*sqrt(n_vars)*log10(n_vars/2)/n_anom_vars;
     anom2 = test_data(test_data_height/2+1:end,:);
     anom_add = 1.5 * sum(anom2'.^2)'/n_anom_vars;
@@ -128,17 +127,20 @@ end
 % Delete unwanted features
 % dataset_table = removevars(dataset_table,{'country','population','people_fully_vaccinated', 'population_density','aged_65_older','aged_70_older','cardiovasc_death_rate','diabetes_prevalence','vaccination_index'});
 
+prep_method_names = ["NoPrep","MC","AS"];
+
 % Save feature labels
 features = dataset_table.Properties.VariableNames;
 
-prep = 2;   % Autoscaling
+prep_method = 2;%config.prep_method;   % Autoscaling
+prep_method_name = prep_method_names(prep_method+1);
 
-[train_dataset_prep, prep_mean, prep_scale] = preprocess2D(normal_train_data,prep);
+[train_dataset_prep, prep_mean, prep_scale] = preprocess2D(normal_train_data,prep_method);
 test_dataset_prep = preprocess2Dapp(test_data,prep_mean,prep_scale);
 
 %% PCA
 
-pcs = 10;%config.PCs;    % Principal Components
+pcs = 3;config.PCs;    % Principal Components
 
 % figure(2);
 % scatter3(train_dataset_prep(:,1),train_dataset_prep(:,2),train_dataset_prep(:,3))
@@ -162,7 +164,7 @@ pcs = 10;%config.PCs;    % Principal Components
 % legend("Data","Eigenvector 1","Eigenvector 2","Eigenvector 3");
 
 % threshold_percentile = config.threshold_percentile;
-threshold_percentile = 95;
+threshold_percentile = 98;
 
 p_valueD = 1 - threshold_percentile/100;
 p_valueQ = 1 - threshold_percentile/100;
@@ -184,8 +186,10 @@ test_labels = transpose(test_labels);
 pred_loss = transpose(PCA_ROC_scores);
 threshold = QD_threshold;
 kk = strsplit(config.dataset_file,"/");
-kk = strrep(kk(end), ".csv", strcat("_",num2str(n_anom_vars),"gen_AS-PCA"));
-% save(strcat("logs/mat/",kk),'test_labels','pred_loss','threshold')
+kk = strrep(kk(end), ".csv", strcat("_",num2str(n_anom_vars),"gen_",prep_method_name,"-PCA"));
+if config.enable_logging
+    %save(strcat("logs/mat/",kk),'test_labels','pred_loss','threshold')
+end
 %% Validation
 
 % pred_labels = (Qstt > Q_threshold) | (Dstt > D_threshold);

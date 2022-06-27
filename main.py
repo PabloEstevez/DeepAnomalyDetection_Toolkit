@@ -10,6 +10,8 @@ from itertools import product
 
 # %% Load configuration
 
+CONFIG_ID = 2
+
 with open('hyperparams_config.yaml') as f:
     full_configuration = yaml.load(f, Loader=SafeLoader)
 
@@ -17,15 +19,19 @@ with open('hyperparams_config.yaml') as f:
 with open('hyperparams_config.json', 'w') as f:
     json.dump(full_configuration, f)
 
-config = full_configuration['DatasetList'][0]
+config = full_configuration['DatasetList'][CONFIG_ID]
 log_dir = 'logs/fit/'+config["dataset_file"].split("/")[-1].replace(".csv","") + "/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S") + "/"
 
 # %% Run the main program
 
 METRIC_PERFORMANCE = 'AUC'
 HPARAMS = {
-    # 'hidden_layer_size': [64],
-    # 'bottleneck_layer_size': [25],
+    # 'hidden_layer_size': [256,512,600],
+    # 'bottleneck_layer_size': [8,16,32],
+    # 'learning_rate': [0.0001,0.0005,0.001],
+    # 'n_anom_vars': [100,200,500],
+    # 'sparsity': [0.0001,0.0],
+    # 'prep_method': [0,1,2],
 }
 
 if HPARAMS: # hyper-parameters grid testing

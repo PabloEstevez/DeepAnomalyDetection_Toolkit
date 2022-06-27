@@ -62,6 +62,7 @@ for i=1:length(autoencoders_results_files)
     kk = strsplit(autoencoders_results_files(i).name,"_");
     network_type = strsplit(char(kk(end)),".");
     network_type = char(network_type(1));
+%     network_type = strrep(network_type,"AS-",""); % Remove preprocessing string
     kk = strsplit(char(kk(end-1)),"gen");
     n_anom_gen = kk(1);
     
@@ -80,7 +81,7 @@ for i=1:length(autoencoders_results_files)
     results_table(i,:) = [struct2table(S, 'AsArray', 1) table(pred_labels, network_AUC, precision, recall, accuracy, F1)];
     results_row_names(i) = strcat(network_type, "_", n_anom_gen);
     
-    %plot(network_fpr,network_tpr,char(line_styles(n_vars*anom_percentages==str2double(char(n_anom_gen)))));
+%     plot(network_fpr,network_tpr,char(line_styles(n_vars*anom_percentages==str2double(char(n_anom_gen)))));
     if contains(network_type, 'PCA')
         line_style = '-.';
     elseif contains(network_type, '-S-Autoencoder')
