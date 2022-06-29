@@ -1,4 +1,4 @@
-# %% Imports
+# Imports
 import yaml
 import json
 import datetime
@@ -8,7 +8,7 @@ from AnomalyDetector import AnomalyDetector
 from tensorboard.plugins.hparams import api as hp
 from itertools import product
 
-# %% Load configuration
+# Load configuration
 
 CONFIG_ID = 2
 
@@ -22,8 +22,6 @@ with open('hyperparams_config.json', 'w') as f:
 config = full_configuration['DatasetList'][CONFIG_ID]
 log_dir = 'logs/fit/'+config["dataset_file"].split("/")[-1].replace(".csv","") + "/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S") + "/"
 
-# %% Run the main program
-
 METRIC_PERFORMANCE = 'AUC'
 HPARAMS = {
     # 'hidden_layer_size': [256,512,600],
@@ -33,6 +31,8 @@ HPARAMS = {
     # 'sparsity': [0.0001,0.0],
     # 'prep_method': [0,1,2],
 }
+
+# Run the main program
 
 if HPARAMS: # hyper-parameters grid testing
     hparams_list=[]

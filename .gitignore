@@ -1,12 +1,13 @@
 # Custom
-logs
-test_logs
+logs/
+test_logs/
 *.tex
 *.json
 spasm
 table2latex.m
 *_old.*
 *.asv
+playground.m
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
